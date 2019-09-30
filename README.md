@@ -30,5 +30,5 @@ zoom modal when a user clicks on a card.
 ## Wireframes:
 wireframe
 
-mobile wireframe
+![wireframe](wireframe.jpg)
 
