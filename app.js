@@ -13,6 +13,9 @@ const evolutionCard2 = document.querySelector(`#evolution-card-2`);
 const evolutionArrow2 = document.querySelector(`#evolution-arrow-2`);
 const evolutionCard3 = document.querySelector(`#evolution-card-3`);
 
+window.onbeforeunload = function (e) {
+  document.scrollTop(0);
+};
 
 //function to capitalize first letter of a String
 const capitalizeEachWord = (s) => {
@@ -27,58 +30,62 @@ const capitalizeEachWord = (s) => {
   }
 }
 
-const getMainCard = (cardArray = []) => {
+const getOldestCard = (cardArray = []) => {
 
-  let mainSetCode = ``;
+  let oldestSeriesCode = ``;
   let arraySeries = [];
+  //look through card array and get all setCodes(aka series codes)
   cardArray.forEach(e => {
     arraySeries.push(e.setCode);
   })
+
+  //look in array to see if you can find a series card, starting from the oldest setCode
   if (arraySeries.includes('base1')) {
-    mainSetCode = `base1`;
+    oldestSeriesCode = `base1`;
   } else if (arraySeries.includes('base4')) {
-    mainSetCode = `base4`;
+    oldestSeriesCode = `base4`;
   } else if (arraySeries.includes('base5')) {
-    mainSetCode = `base5`;
+    oldestSeriesCode = `base5`;
   } else if (arraySeries.includes('base6')) {
-    mainSetCode = `base6`;
+    oldestSeriesCode = `base6`;
   } else if (arraySeries.includes('ecard1')) {
-    mainSetCode = `ecard1`;
+    oldestSeriesCode = `ecard1`;
   } else if (arraySeries.includes('ex6')) {
-    mainSetCode = `ex6`;
+    oldestSeriesCode = `ex6`;
   } else if (arraySeries.includes('pop3')) {
-    mainSetCode = `pop3`;
+    oldestSeriesCode = `pop3`;
   } else if (arraySeries.includes('ex14')) {
-    mainSetCode = `ex14`;
+    oldestSeriesCode = `ex14`;
   } else if (arraySeries.includes('dp3')) {
-    mainSetCode = `dp3`;
+    oldestSeriesCode = `dp3`;
   } else if (arraySeries.includes('pl1')) {
-    mainSetCode = `pl1`;
+    oldestSeriesCode = `pl1`;
   } else if (arraySeries.includes('hgss2')) {
-    mainSetCode = `hgss2`;
+    oldestSeriesCode = `hgss2`;
   } else if (arraySeries.includes('bw7')) {
-    mainSetCode = `bw7`;
+    oldestSeriesCode = `bw7`;
   } else if (arraySeries.includes('bw8')) {
-    mainSetCode = `bw8`;
+    oldestSeriesCode = `bw8`;
   } else if (arraySeries.includes('bw10')) {
-    mainSetCode = `bw10`;
+    oldestSeriesCode = `bw10`;
   } else if (arraySeries.includes('xyp')) {
-    mainSetCode = `xyp`;
+    oldestSeriesCode = `xyp`;
   } else if (arraySeries.includes('xy1')) {
-    mainSetCode = `xy1`;
+    oldestSeriesCode = `xy1`;
   } else if (arraySeries.includes('g1')) {
-    mainSetCode = `g1`;
+    oldestSeriesCode = `g1`;
   } else if (arraySeries.includes('xy12')) {
-    mainSetCode = `xy12`;
+    oldestSeriesCode = `xy12`;
   } else if (arraySeries.includes('sm9')) {
-    mainSetCode = `sm9`;
+    oldestSeriesCode = `sm9`;
   } else if (arraySeries.includes('sm10')) {
-    mainSetCode = `sm10`;
+    oldestSeriesCode = `sm10`;
   }
 
+  //get card associated with oldest series code found
   for (let i = 0; i < cardArray.length; i++) {
     element = cardArray[i];
-    if (mainSetCode === element.setCode) {
+    if (oldestSeriesCode === element.setCode) {
       return element;
     }
   }
@@ -95,7 +102,7 @@ searchButton.addEventListener(`click`, async () => {
   console.log(cardArray);
 
 
-  element = getMainCard(cardArray);
+  element = getOldestCard(cardArray);
 
 
   let image = "";
@@ -132,25 +139,35 @@ searchButton.addEventListener(`click`, async () => {
 
     const response = await axios.get(`${apiCall}name=${basicCharacterName}`);
     const cardArray = response.data.cards;
-    const basicElement = getMainCard(cardArray);
+    const basicElement = getOldestCard(cardArray);
     basicElement.imageUrlHiRes;
     evolutionCard1.innerHTML = `
-        <h2 class="evolution-card-header">Basic Card</h2>
-        <img class="evolution-cards" src="${basicElement.imageUrlHiRes}">`;
+    <div class="evolution-card-header-wrapper">
+      <h2 class="evolution-card-header">Basic Card</h2>
+    </div>
+    <img class="evolution-cards" src="${basicElement.imageUrlHiRes}">`;
 
     evolutionCard1.style.display = `block`;
     evolutionArrow1.style.display = `block`;
     evolutionCard2.style.display = `block`;
+    evolutionArrow2.style.display = `none`;
+    evolutionCard3.style.display = `none`;
 
   } else if (element.subtype == `Stage 2`) {
     evolutionCard1.innerHTML = `
-        <h2 class="evolution-card-header">Basic Card</h2>
+        <div class="evolution-card-header-wrapper">
+          <h2 class="evolution-card-header">Basic Card</h2>
+        </div>
         <img class="evolution-cards" src="Pokemon_Trading_Card_Game_cardback.jpg">`;
     evolutionCard2.innerHTML = `
+      <div class="evolution-card-header-wrapper">
         <h2 class="evolution-card-header">Stage 1 Card</h2>
-        <img class="evolution-cards" src="Pokemon_Trading_Card_Game_cardback.jpg">`;
+      </div>
+      <img class="evolution-cards" src="Pokemon_Trading_Card_Game_cardback.jpg">`;
     evolutionCard3.innerHTML = `
-        <h2 class="evolution-card-header">Stage 2 Card</h2>
+        <div class="evolution-card-header-wrapper">
+          <h2 class="evolution-card-header">Stage 2 Card</h2>
+        </div>
         <img class="evolution-cards" src="${image}">`;
     evolutionCardBanner.style.display = `flex`;
     evolutionCardDiv.style.display = `flex`;
@@ -160,21 +177,25 @@ searchButton.addEventListener(`click`, async () => {
 
     const response = await axios.get(`${apiCall}name=${basicCharacterName}`);
     const cardArray = response.data.cards;
-    const stage1Element = getMainCard(cardArray);
+    const stage1Element = getOldestCard(cardArray);
     stage1Element.imageUrlHiRes;
     evolutionCard2.innerHTML = `
-        <h2 class="evolution-card-header">Stage 1 Card</h2>
-        <img class="evolution-cards" src="${stage1Element.imageUrlHiRes}">`;
+    <div class="evolution-card-header-wrapper">
+      <h2 class="evolution-card-header">Stage 1 Card</h2>
+    </div>
+    <img class="evolution-cards" src="${stage1Element.imageUrlHiRes}">`;
 
     //get basic card
     const basicCardName = capitalizeEachWord(stage1Element.evolvesFrom).split(` `).join(`+`);
 
     const response2 = await axios.get(`${apiCall}name=${basicCardName}`);
     const cardArray2 = response2.data.cards;
-    const basicElement = getMainCard(cardArray2);
+    const basicElement = getOldestCard(cardArray2);
     basicElement.imageUrlHiRes;
     evolutionCard1.innerHTML = `
-        <h2 class="evolution-card-header">Basic Card</h2>
+    <div class="evolution-card-header-wrapper">
+    <h2 class="evolution-card-header">Basic Card</h2>
+    </div>
         <img class="evolution-cards" src="${basicElement.imageUrlHiRes}">`;
 
 

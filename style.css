@@ -33,6 +33,11 @@ header #app-name {
   object-fit: cover;
 }
 
+body {
+  min-width: 800px;
+
+}
+
 main {
   margin-top: 60px;
   height: 1500px;
@@ -146,10 +151,13 @@ main {
 
 .evolution-card-header {
   margin-top: 20px;
-  padding: 10px;
   background-color: gray;
-
+  padding: 10px;
 }
+.evolution-card-header-wrapper {
+  margin: 20px 20px 0 20px;
+}
+
 .evolution-cards {
   margin: 20px;
   height: 250px;
@@ -159,11 +167,9 @@ main {
 }
 
 .double-arrow {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  padding: 10px;
-  background-color: white;
+  width: 100%;
+  /* object-fit: cover;
+  padding: 10px; */
 }
 footer {
   /* background-color:#192553; */
