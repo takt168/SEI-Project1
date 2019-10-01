@@ -1,5 +1,6 @@
 * {
   margin: 0 auto;
+  font-family: 'Lato', sans-serif;
 }
 
 a {
@@ -12,12 +13,18 @@ header {
   top: 0;
   z-index: 1;
   width: 100%;
-  /* background-color:#192553; */
-  background-color:gray;
+  background-color:#192553;
+  /* background-color:gray; */
   height: 60px;
   color: #FECB03;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+}
+
+header #app-name {
+  width: 90%;
+  text-align: center;
 }
 
 #logo {
@@ -37,11 +44,34 @@ main {
 
 #search-section {
   display: inline-block;
-  width: 800px;
+  width: 600px;
   border: 5px solid white;
   background-color: gray;
-  margin: 100px 0;
-  padding: 20px;
+  margin: 50px;
+  padding: 10px;
+}
+
+#search-section h2 {
+  margin: 10px;
+}
+
+#search-section input {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 1em;
+}
+
+#search-button {
+  font-size: 1em;
+  padding: 10px 24px;
+  border-radius: 20px;
+  border: none;
+}
+
+#search-button:hover {
+  color: white;
+  background-color:#192553;
 }
 
 #main-card-banner {
@@ -49,7 +79,7 @@ main {
   /* background-color:#192553; */
   background-color:gray;
   height: 60px;
-  display: flex;
+  display: none;
   align-items: center;
 }
 
@@ -74,7 +104,7 @@ main {
   /* background-color:#192553; */
   background-color:gray;
   height: 60px;
-  display: flex;
+  display: none;
   align-items: center;
 }
 
@@ -99,7 +129,7 @@ main {
   /* background-color:#192553; */
   background-color:gray;
   height: 60px;
-  display: flex;
+  display: none;
   align-items: center;
 }
 
@@ -111,6 +141,7 @@ main {
   background-image: url("Pokemon_Trading_Card_Game_cardback.jpg");  
   display: flex;
   align-items: center;
+  display:none;
 }
 
 .evolution-card-header {
@@ -141,4 +172,24 @@ footer {
   color: #FECB03;
   display: flex;
   align-items: center;  
+}
+
+#evolution-card-1 {
+  display: none;
+}
+
+#evolution-arrow-1 {
+  display: none;
+}
+
+#evolution-card-2 {
+  display: none;
+}
+
+#evolution-arrow-2 {
+  display: none;
+}
+
+#evolution-card-3 {
+  display: none;
 }
