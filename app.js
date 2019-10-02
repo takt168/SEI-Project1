@@ -1,4 +1,4 @@
-const apiCall = `https://api.pokemontcg.io/v1/cards?`;
+const apiCall = `https://api.pokemontcg.io/v1/cards`;
 const searchButton = document.querySelector(`#search-button`);
 const mainCardBanner = document.querySelector(`#main-card-banner`);
 const mainCardDiv = document.querySelector(`#main-card`);
@@ -13,9 +13,67 @@ const evolutionCard2 = document.querySelector(`#evolution-card-2`);
 const evolutionArrow2 = document.querySelector(`#evolution-arrow-2`);
 const evolutionCard3 = document.querySelector(`#evolution-card-3`);
 
-window.onbeforeunload = function (e) {
-  document.scrollTop(0);
-};
+const errorMessage = document.querySelector(`#error-message`);
+const modal = document.querySelector(`#my-modal`);
+const span = document.querySelector(`.close`);
+
+const dropDownListItems = document.querySelector(`#dropdown-list`);
+const searchInput = document.querySelector(`#my-input`);
+
+function filterFunction() {
+  if (searchInput.value.length > 0) {
+    dropDownListItems.style.display = `block`;
+  } else {
+    dropDownListItems.style.display = `none`;
+  }
+
+  let input, filter, ul, li, a, i;
+  input = document.getElementById("my-input");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("my-dropdown");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
+
+const getName = async () => {
+
+  const result = [];
+  const response = await axios.get(`${apiCall}?setCodes=base5`);
+  const cardArray = response.data.cards;
+  for (let i = 0; i < cardArray.length; i++) {
+    result.push(cardArray[i].name);
+  }
+  console.log(result);
+}
+getName();
+
+
+span.onclick = () => {
+  modal.style.display = "none";
+}
+
+window.onclick = (event) => {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+const hideAllDivs = () => {
+  mainCardBanner.style.display = `none`;
+  mainCardDiv.style.display = `none`;
+  altCardBanner.style.display = `none`;
+  altCardDiv.style.display = `none`;
+  evolutionCardBanner.style.display = `none`;
+  evolutionCardDiv.style.display = `none`;
+
+}
 
 //function to capitalize first letter of a String
 const capitalizeEachWord = (s) => {
@@ -89,7 +147,6 @@ const getOldestCard = (cardArray = []) => {
       return element;
     }
   }
-
 }
 
 searchButton.addEventListener(`click`, async () => {
@@ -97,135 +154,133 @@ searchButton.addEventListener(`click`, async () => {
   const characterName = capitalizeEachWord(document.querySelector(`#character-name`).value);
   const characterNameFormatted = characterName.split(` `).join(`+`);
 
-  const response = await axios.get(`${apiCall}name=${characterNameFormatted}`);
+  const response = await axios.get(`${apiCall}?name=${characterNameFormatted}`);
   const cardArray = response.data.cards;
   console.log(cardArray);
 
+  //API call returned no rows.  either API error or no rows found
+  if (cardArray.length === 0) {
+    hideAllDivs();
+    modal.style.display = "block";
+    console.log("array is empty");
+    errorMessage.innerHTML =
+      `<p>${document.querySelector(`#character-name`).value} not found.  Please search again.</p>`;
+  } else {
 
-  element = getOldestCard(cardArray);
+    element = getOldestCard(cardArray);
+
+    let mainCardId = ``;
+    //keep track of main card id, so you don't show it again in the alt card section
+    mainCardId = element.id;
+    let image = element.imageUrlHiRes;
+
+    mainCardBanner.innerHTML = `<h1 id="main-card-banner-title">${characterName}</h1>`;
+
+    mainCardDiv.innerHTML = `<img id="main-card-img" src="${image}">`;
+    mainCardDiv.style.display = `block`;
 
 
-  let image = "";
-  let mainCardId = ``;
+    //update right card in evolution section.
+    if (element.subtype == `Stage 1`) {
+      evolutionCard2.innerHTML = ``;
+      evolutionCard2.innerHTML = `
+      <h2 class="evolution-card-header">Stage 1 Card</h2>
+      <img class="evolution-cards" src="${image}">`;
+      evolutionCardBanner.style.display = `flex`;
+      evolutionCardDiv.style.display = `flex`;
 
-  console.log(element.id);
-  console.log(element.name);
-  console.log(element.subtype);
-  console.log(element.evolvesFrom);
-  console.log(element.series);
-  console.log(element.set);
-  image = element.imageUrlHiRes;
-  //image = element.imageUrl;
+      //get basic card
+      const basicCharacterName = capitalizeEachWord(element.evolvesFrom).split(` `).join(`+`);
 
-  mainCardBanner.innerHTML = `
-      <h1 id="main-card-banner-title">${characterName}</h1>`;
-
-  mainCardDiv.innerHTML = `
-      <img id="main-card-img" src="${image}">`;
-
-  //keep track of main card id, so you don't show it again in the alt card section
-  mainCardId = element.id;
-  //update right card in evolution section.
-  if (element.subtype == `Stage 1`) {
-    evolutionCard2.innerHTML = ``;
-    evolutionCard2.innerHTML = `
-        <h2 class="evolution-card-header">Stage 1 Card</h2>
-        <img class="evolution-cards" src="${image}">`;
-    evolutionCardBanner.style.display = `flex`;
-    evolutionCardDiv.style.display = `flex`;
-
-    //get basic card
-    const basicCharacterName = capitalizeEachWord(element.evolvesFrom).split(` `).join(`+`);
-
-    const response = await axios.get(`${apiCall}name=${basicCharacterName}`);
-    const cardArray = response.data.cards;
-    const basicElement = getOldestCard(cardArray);
-    basicElement.imageUrlHiRes;
-    evolutionCard1.innerHTML = `
+      const response = await axios.get(`${apiCall}?name=${basicCharacterName}`);
+      const cardArray = response.data.cards;
+      const basicElement = getOldestCard(cardArray);
+      basicElement.imageUrlHiRes;
+      evolutionCard1.innerHTML = `
     <div class="evolution-card-header-wrapper">
-      <h2 class="evolution-card-header">Basic Card</h2>
-    </div>
-    <img class="evolution-cards" src="${basicElement.imageUrlHiRes}">`;
+          <h2 class="evolution-card-header">Basic Card</h2>
+        </div>
+        <img class="evolution-cards" src="${basicElement.imageUrlHiRes}">`;
 
-    evolutionCard1.style.display = `block`;
-    evolutionArrow1.style.display = `block`;
-    evolutionCard2.style.display = `block`;
-    evolutionArrow2.style.display = `none`;
-    evolutionCard3.style.display = `none`;
+      evolutionCard1.style.display = `block`;
+      evolutionArrow1.style.display = `block`;
+      evolutionCard2.style.display = `block`;
+      evolutionArrow2.style.display = `none`;
+      evolutionCard3.style.display = `none`;
 
-  } else if (element.subtype == `Stage 2`) {
-    evolutionCard1.innerHTML = `
+    } else if (element.subtype == `Stage 2`) {
+      evolutionCard1.innerHTML = `
         <div class="evolution-card-header-wrapper">
           <h2 class="evolution-card-header">Basic Card</h2>
         </div>
         <img class="evolution-cards" src="Pokemon_Trading_Card_Game_cardback.jpg">`;
-    evolutionCard2.innerHTML = `
+      evolutionCard2.innerHTML = `
       <div class="evolution-card-header-wrapper">
-        <h2 class="evolution-card-header">Stage 1 Card</h2>
-      </div>
-      <img class="evolution-cards" src="Pokemon_Trading_Card_Game_cardback.jpg">`;
-    evolutionCard3.innerHTML = `
+            <h2 class="evolution-card-header">Stage 1 Card</h2>
+          </div>
+          <img class="evolution-cards" src="Pokemon_Trading_Card_Game_cardback.jpg">`;
+      evolutionCard3.innerHTML = `
         <div class="evolution-card-header-wrapper">
-          <h2 class="evolution-card-header">Stage 2 Card</h2>
-        </div>
-        <img class="evolution-cards" src="${image}">`;
-    evolutionCardBanner.style.display = `flex`;
-    evolutionCardDiv.style.display = `flex`;
+              <h2 class="evolution-card-header">Stage 2 Card</h2>
+            </div>
+            <img class="evolution-cards" src="${image}">`;
+      evolutionCardBanner.style.display = `flex`;
+      evolutionCardDiv.style.display = `flex`;
 
-    //get stage1 card
-    const basicCharacterName = capitalizeEachWord(element.evolvesFrom).split(` `).join(`+`);
+      //get stage1 card
+      const basicCharacterName = capitalizeEachWord(element.evolvesFrom).split(` `).join(`+`);
 
-    const response = await axios.get(`${apiCall}name=${basicCharacterName}`);
-    const cardArray = response.data.cards;
-    const stage1Element = getOldestCard(cardArray);
-    stage1Element.imageUrlHiRes;
-    evolutionCard2.innerHTML = `
+      const response = await axios.get(`${apiCall}?name=${basicCharacterName}`);
+      const cardArray = response.data.cards;
+      const stage1Element = getOldestCard(cardArray);
+      stage1Element.imageUrlHiRes;
+      evolutionCard2.innerHTML = `
     <div class="evolution-card-header-wrapper">
-      <h2 class="evolution-card-header">Stage 1 Card</h2>
-    </div>
-    <img class="evolution-cards" src="${stage1Element.imageUrlHiRes}">`;
+                <h2 class="evolution-card-header">Stage 1 Card</h2>
+              </div>
+              <img class="evolution-cards" src="${stage1Element.imageUrlHiRes}">`;
 
-    //get basic card
-    const basicCardName = capitalizeEachWord(stage1Element.evolvesFrom).split(` `).join(`+`);
+      //get basic card
+      const basicCardName = capitalizeEachWord(stage1Element.evolvesFrom).split(` `).join(`+`);
 
-    const response2 = await axios.get(`${apiCall}name=${basicCardName}`);
-    const cardArray2 = response2.data.cards;
-    const basicElement = getOldestCard(cardArray2);
-    basicElement.imageUrlHiRes;
-    evolutionCard1.innerHTML = `
+      const response2 = await axios.get(`${apiCall}?name=${basicCardName}`);
+      const cardArray2 = response2.data.cards;
+      const basicElement = getOldestCard(cardArray2);
+      basicElement.imageUrlHiRes;
+      evolutionCard1.innerHTML = `
     <div class="evolution-card-header-wrapper">
-    <h2 class="evolution-card-header">Basic Card</h2>
-    </div>
-        <img class="evolution-cards" src="${basicElement.imageUrlHiRes}">`;
+                  <h2 class="evolution-card-header">Basic Card</h2>
+                </div>
+                <img class="evolution-cards" src="${basicElement.imageUrlHiRes}">`;
 
 
-    evolutionCard1.style.display = `block`;
-    evolutionArrow1.style.display = `block`;
-    evolutionCard2.style.display = `block`;
-    evolutionArrow2.style.display = `block`;
-    evolutionCard3.style.display = `block`;
+      evolutionCard1.style.display = `block`;
+      evolutionArrow1.style.display = `block`;
+      evolutionCard2.style.display = `block`;
+      evolutionArrow2.style.display = `block`;
+      evolutionCard3.style.display = `block`;
 
-  };
+    };
 
-  //clear out altCardDiv
-  altCardDiv.innerHTML = ``;
+    //clear out altCardDiv
+    altCardDiv.innerHTML = ``;
 
-  cardArray.forEach(element => {
+    cardArray.forEach(element => {
 
-    if (mainCardId !== element.id) {
-      altCardBanner.innerHTML = `
-      <h1 id="alt-card-banner-title">Alternate Cards for ${characterName}</h1>`;
+      if (mainCardId !== element.id) {
+        altCardBanner.innerHTML = `<h1 id="alt-card-banner-title">Alternate Cards for ${characterName}</h1>`;
+        altCardDiv.innerHTML += `<img id="alt-card-img" src="${element.imageUrlHiRes}">`;
+        altCardDiv.style.display = `block`;
 
-      altCardDiv.innerHTML += `
-        <img id="alt-card-img" src="${element.imageUrlHiRes}">`;
-    }
+      }
 
-    evolutionCardBanner.innerHTML = `
+      evolutionCardBanner.innerHTML = `
     <h1 id="evolution-card-banner-title">Evolution Chart for ${characterName}</h1>`;
 
-  });
+    });
 
 
-  mainCardBanner.style.display = `flex`;
-  altCardBanner.style.display = `flex`;
+    mainCardBanner.style.display = `flex`;
+    altCardBanner.style.display = `flex`;
+  }
 });

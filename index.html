@@ -26,7 +26,34 @@
     <div id="search-section">
       <h2>Search for your favorite Pokémon character</h2>
       <input type="text" id="character-name" placeholder="Character Name">
+
+      <div class="dropdown">
+        <div id="my-dropdown" class="dropdown-content">
+          <input type="text" placeholder="Search.." id="my-input" onkeyup="filterFunction()">
+          <div id="dropdown-list">
+            <a href="#about">About</a>
+            <a href="#base">Base</a>
+            <a href="#blog">Blog</a>
+            <a href="#contact">Contact</a>
+            <a href="#custom">Custom</a>
+            <a href="#support">Support</a>
+            <a href="#tools">Tools</a>
+          </div>
+        </div>
+      </div>
+
       <button id="search-button">Search</button>
+    </div>
+
+    <div id="my-modal" class="modal">
+
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="error-message">
+
+        </div>
+      </div>
+
     </div>
 
     <div id="main-card-banner">

@@ -155,7 +155,7 @@ main {
   padding: 10px;
 }
 .evolution-card-header-wrapper {
-  margin: 20px 20px 0 20px;
+  margin: 20px 20px 0 20px  ;
 }
 
 .evolution-cards {
@@ -166,6 +166,9 @@ main {
   padding: 10px;
 }
 
+#evolution-arrow-1, #evolution-arrow-2 {
+  width: 100px;
+}
 .double-arrow {
   width: 100%;
   /* object-fit: cover;
@@ -197,5 +200,86 @@ footer {
 }
 
 #evolution-card-3 {
+  display: none;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8); 
+}
+
+.modal-content {
+  background-color: white;
+  margin: 25% auto; 
+  padding: 10px;
+  border: 1px solid lightgray;
+  width: 50%; 
+  color:black;
+  font-size: 1.5em;
+}
+
+.close {
+  color: black;
+  float: right;
+  font-size: .75em;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 800px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+
+/* The search field */
+#my-input {
+  box-sizing: border-box;
+  /* background-image: url('searchicon.png'); */
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 14px 20px 12px 45px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+/* The search field when it gets focus/clicked on */
+#my-input:focus {outline: 3px solid #ddd;}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content */
+.dropdown-content {
+  background-color: #f6f6f6;
+  min-width: 230px;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+#dropdown-list {
+  max-height: 200px;
+  overflow: auto;
   display: none;
 }
