@@ -361,7 +361,9 @@ searchButton.addEventListener(`click`, async () => {
 
     });
 
-
     mainCardBanner.style.display = `flex`;
+    if (cardArray.length > 1) {
+      altCardBanner.style.display = `flex`;
+    }
   }
 });
