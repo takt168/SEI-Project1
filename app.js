@@ -70,13 +70,9 @@ const getName = async () => {
   for (let i = 0; i < setsCardArray.length; i++) {
     allSetNamesOrdered.push(setsCardArray[i].code);
   }
-  console.log("allSetNamesOrdered: " + allSetNamesOrdered.length);
-
 
   const mySet = new Set(buildListOfCommonNames());
-  console.log(`common name array length: ${mySet.length}`);
   mySet.forEach(item => {
-    console.log(`-${item}-`);
     dropDownListItems.innerHTML += ` <a href="#" onclick="printName('${item}')">${item}</a>`;
   });
 }
@@ -219,9 +215,7 @@ const getOldestCard = (cardArray = []) => {
 searchInput.addEventListener("keyup", function (event) {
   // Number 13 is the "Enter" key on the keyboard
   if (event.keyCode === 13) {
-    // Cancel the default action, if needed
     event.preventDefault();
-    // Trigger the button element with a click
     searchButton.click();
   }
 });
@@ -234,7 +228,6 @@ searchButton.addEventListener(`click`, async () => {
 
   const response = await axios.get(`${apiCallForCards}?name=${characterNameFormatted}`);
   const cardArray = response.data.cards;
-  console.log(cardArray);
 
   console.log(`character name=${characterName}=`);
   if (characterName === ``) {
@@ -259,10 +252,12 @@ searchButton.addEventListener(`click`, async () => {
     mainCardId = element.id;
     let image = element.imageUrlHiRes;
 
-    mainCardBanner.innerHTML = `<h1 id="main-card-banner-title">${element.name}</h1>`;
+    mainCardBanner.innerHTML = `<h1 id="main-card-banner-title">${characterName}</h1>`;
 
     mainCardDiv.innerHTML = `<img id="main-card-img" src="${image}">`;
     mainCardDiv.style.display = `block`;
+    altCardBanner.style.display = `none`;
+    altCardDiv.style.display = `none`;
     evolutionCardBanner.style.display = `none`;
     evolutionCardDiv.style.display = `none`;
 
@@ -355,19 +350,18 @@ searchButton.addEventListener(`click`, async () => {
     cardArray.forEach(element => {
 
       if (mainCardId !== element.id) {
-        altCardBanner.innerHTML = `<h1 id="alt-card-banner-title">Alternate Cards for ${element.name}</h1>`;
+        altCardBanner.innerHTML = `<h1 id="alt-card-banner-title">Alternate Cards for ${characterName}</h1>`;
         altCardDiv.innerHTML += `<img id="alt-card-img" src="${element.imageUrlHiRes}">`;
         altCardDiv.style.display = `block`;
 
       }
 
       evolutionCardBanner.innerHTML = `
-    <h1 id="evolution-card-banner-title">Evolution Chart for ${element.name}</h1>`;
+    <h1 id="evolution-card-banner-title">Evolution Chart for ${characterName}</h1>`;
 
     });
 
 
     mainCardBanner.style.display = `flex`;
-    altCardBanner.style.display = `flex`;
   }
 });
