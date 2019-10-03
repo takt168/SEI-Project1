@@ -32,7 +32,7 @@ const buildListOfCommonNames = () => {
       `Deoxys`, `Turtwig`, `Slowbro`, `Slowpoke`, `Slowking`, `Misdreavus`, `Vulpix`, `Ivysaur`, `Barboach`,
       `Umbreon`, `Bidoof`, `Flareon`, `Talonflame`, `Fletchinder`, `Fletchling`, `Jynx`, `Jolteon`, `Joltik`,
       `Jumpluff`, `Skiploom`, `Hoppip`, `Nidoqueen`, `Nidorina`, `Nidoran`, `Quagsire`, `Quilladin`,
-      `Cyndaquil`, `Qwilfish`];
+      `Cyndaquil`, `Qwilfish`, `Ampharos`, `Flaaffy`, `Mareep`];
   return array.sort();
 }
 function printName(e) {
