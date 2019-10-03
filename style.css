@@ -50,9 +50,7 @@ main {
 #search-section {
   display: inline-block;
   width: 600px;
-  border: 5px solid white;
-  background-color: gray;
-  margin: 50px;
+  margin: 20px;
   padding: 10px;
 }
 
@@ -72,6 +70,8 @@ main {
   padding: 10px 24px;
   border-radius: 20px;
   border: none;
+  vertical-align: top;
+  margin-top: 10px;
 }
 
 #search-button:hover {
@@ -261,9 +261,7 @@ footer {
 
 /* Dropdown Content */
 .dropdown-content {
-  background-color: #f6f6f6;
   min-width: 230px;
-  border: 1px solid #ddd;
   z-index: 1;
 }
 
@@ -282,4 +280,6 @@ footer {
   max-height: 200px;
   overflow: auto;
   display: none;
+  background-color: lightgray;
+  border: 3px solid white;
 }

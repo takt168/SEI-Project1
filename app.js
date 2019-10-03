@@ -17,22 +17,26 @@ const errorMessage = document.querySelector(`#error-message`);
 const modal = document.querySelector(`#my-modal`);
 const span = document.querySelector(`.close`);
 
+const dropdownDiv = document.querySelector("#my-dropdown");
 const dropDownListItems = document.querySelector(`#dropdown-list`);
 const searchInput = document.querySelector(`#my-input`);
 
+function printName(e) {
+  console.log(`printName: ${e}`);
+  document.querySelector(`#my-input`).value = e;
+  filterFunction();
+}
 function filterFunction() {
+  //show/hide "dropdown" list
   if (searchInput.value.length > 0) {
     dropDownListItems.style.display = `block`;
   } else {
     dropDownListItems.style.display = `none`;
   }
 
-  let input, filter, ul, li, a, i;
-  input = document.getElementById("my-input");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("my-dropdown");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
+  const filter = searchInput.value.toUpperCase();
+  let a = dropdownDiv.getElementsByTagName("a");
+  for (let i = 0; i < a.length; i++) {
     txtValue = a[i].textContent || a[i].innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
       a[i].style.display = "";
@@ -43,14 +47,21 @@ function filterFunction() {
 }
 
 const getName = async () => {
-
-  const result = [];
   const response = await axios.get(`${apiCall}?setCodes=base5`);
   const cardArray = response.data.cards;
+
+  let set1 = new Set();
+  console.log(`cardArray size: ${cardArray.length}`)
   for (let i = 0; i < cardArray.length; i++) {
-    result.push(cardArray[i].name);
+    if (!set1.has(cardArray[i].name)) {
+      set1.add(cardArray[i].name);
+    }
   }
-  console.log(result);
+  console.log(set1.length);
+  for (let item of set1) {
+    console.log(`-item-`);
+    dropDownListItems.innerHTML += ` <a href="#" onclick="printName('${item}')">${item}</a>`;
+  }
 }
 getName();
 
@@ -92,6 +103,7 @@ const getOldestCard = (cardArray = []) => {
 
   let oldestSeriesCode = ``;
   let arraySeries = [];
+  let myElement = ``;
   //look through card array and get all setCodes(aka series codes)
   cardArray.forEach(e => {
     arraySeries.push(e.setCode);
@@ -144,27 +156,43 @@ const getOldestCard = (cardArray = []) => {
   for (let i = 0; i < cardArray.length; i++) {
     element = cardArray[i];
     if (oldestSeriesCode === element.setCode) {
-      return element;
+      myElement = element;
+      break;
     }
   }
+
+  if (myElement === ``) {
+    myElement = cardArray[0];
+  }
+
+  return myElement;
 }
 
 searchButton.addEventListener(`click`, async () => {
 
-  const characterName = capitalizeEachWord(document.querySelector(`#character-name`).value);
+  dropDownListItems.style.display = `none`;
+
+  const characterName = capitalizeEachWord(document.querySelector(`#my-input`).value);
   const characterNameFormatted = characterName.split(` `).join(`+`);
 
   const response = await axios.get(`${apiCall}?name=${characterNameFormatted}`);
   const cardArray = response.data.cards;
   console.log(cardArray);
 
-  //API call returned no rows.  either API error or no rows found
-  if (cardArray.length === 0) {
+  console.log(`character name=${characterName}=`);
+  if (characterName === ``) {
+    hideAllDivs();
+    modal.style.display = "block";
+    console.log("input text is null");
+    errorMessage.innerHTML =
+      `<p>Please enter a name and search again.</p>`;
+  }
+  else if (cardArray.length === 0) {   //API call returned no rows.  either API error or no rows found
     hideAllDivs();
     modal.style.display = "block";
     console.log("array is empty");
     errorMessage.innerHTML =
-      `<p>${document.querySelector(`#character-name`).value} not found.  Please search again.</p>`;
+      `<p>${characterName} not found.  Please search again.</p>`;
   } else {
 
     element = getOldestCard(cardArray);
