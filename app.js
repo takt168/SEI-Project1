@@ -1,4 +1,5 @@
-const apiCall = `https://api.pokemontcg.io/v1/cards`;
+const apiCallForCards = `https://api.pokemontcg.io/v1/cards`;
+const apiCallForSets = `https://api.pokemontcg.io/v1/sets`;
 const searchButton = document.querySelector(`#search-button`);
 const mainCardBanner = document.querySelector(`#main-card-banner`);
 const mainCardDiv = document.querySelector(`#main-card`);
@@ -21,6 +22,17 @@ const dropdownDiv = document.querySelector("#my-dropdown");
 const dropDownListItems = document.querySelector(`#dropdown-list`);
 const searchInput = document.querySelector(`#my-input`);
 
+
+const buildListOfCommonNames = () => {
+  const array =
+    [`Pikachu`, `Raichu`, `Charmander`, `Charmeleon`, `Charizard`, `Squirtle`, `Wartortle`, `Blastoise`,
+      `Espeon`, `Venusaur`, `Mewtwo`, `Kangaskhan`, `Shining Charizard`, `Magikarp`, `Machamp`, `Machop`,
+      `Machoke`, `Chansey`, `Furret`, `Sentret`, `JigglyPuff`, `Snorlax`, `Persian`, `Swirlix`, `Eevee`,
+      `Drowzee`, `Floatzel`, `Zorua`, `Inkay`, `Mightyena`, `Psyduck`, `Poochyena`, `Xerneas`, `Luxray`,
+      `Deoxys`, `Turtwig`, `Slowbro`, `Slowpoke`, `Slowking`, `Misdreavus`, `Vulpix`, `Ivysaur`, `Barboach`,
+      `Umbreon`];
+  return array.sort();
+}
 function printName(e) {
   console.log(`printName: ${e}`);
   document.querySelector(`#my-input`).value = e;
@@ -47,22 +59,24 @@ function filterFunction() {
 }
 
 const getName = async () => {
-  const response = await axios.get(`${apiCall}?setCodes=base5`);
-  const cardArray = response.data.cards;
 
-  let set1 = new Set();
-  console.log(`cardArray size: ${cardArray.length}`)
-  for (let i = 0; i < cardArray.length; i++) {
-    if (!set1.has(cardArray[i].name)) {
-      set1.add(cardArray[i].name);
-    }
+  const allSetNamesOrdered = [];
+  const setsResponse = await axios.get(apiCallForSets);
+  const setsCardArray = setsResponse.data.sets;
+  for (let i = 0; i < setsCardArray.length; i++) {
+    allSetNamesOrdered.push(setsCardArray[i].code);
   }
-  console.log(set1.length);
-  for (let item of set1) {
-    console.log(`-item-`);
+  console.log("allSetNamesOrdered: " + allSetNamesOrdered.length);
+
+
+  const mySet = new Set(buildListOfCommonNames());
+  console.log(`common name array length: ${mySet.length}`);
+  mySet.forEach(item => {
+    console.log(`-${item}-`);
     dropDownListItems.innerHTML += ` <a href="#" onclick="printName('${item}')">${item}</a>`;
-  }
+  });
 }
+
 getName();
 
 
@@ -112,14 +126,44 @@ const getOldestCard = (cardArray = []) => {
   //look in array to see if you can find a series card, starting from the oldest setCode
   if (arraySeries.includes('base1')) {
     oldestSeriesCode = `base1`;
+  } else if (arraySeries.includes('base2')) {
+    oldestSeriesCode = `base2`;
+  } else if (arraySeries.includes('basep')) {
+    oldestSeriesCode = `basep`;
+  } else if (arraySeries.includes('base3')) {
+    oldestSeriesCode = `base3`;
   } else if (arraySeries.includes('base4')) {
     oldestSeriesCode = `base4`;
   } else if (arraySeries.includes('base5')) {
     oldestSeriesCode = `base5`;
+  } else if (arraySeries.includes('gym1')) {
+    oldestSeriesCode = `gym1`;
+  } else if (arraySeries.includes('gym2')) {
+    oldestSeriesCode = `gym2`;
+  } else if (arraySeries.includes('neo1')) {
+    oldestSeriesCode = `neo1`;
+  } else if (arraySeries.includes('neo2')) {
+    oldestSeriesCode = `neo2`;
+  } else if (arraySeries.includes('si1')) {
+    oldestSeriesCode = `si1`;
+  } else if (arraySeries.includes('neo3')) {
+    oldestSeriesCode = `neo3`;
+  } else if (arraySeries.includes('neo4')) {
+    oldestSeriesCode = `neo4`;
   } else if (arraySeries.includes('base6')) {
     oldestSeriesCode = `base6`;
   } else if (arraySeries.includes('ecard1')) {
     oldestSeriesCode = `ecard1`;
+  } else if (arraySeries.includes('ecard2')) {
+    oldestSeriesCode = `ecard2`;
+  } else if (arraySeries.includes('ecard3')) {
+    oldestSeriesCode = `ecard3`;
+  } else if (arraySeries.includes('ex1')) {
+    oldestSeriesCode = `ex1`;
+  } else if (arraySeries.includes('ex3')) {
+    oldestSeriesCode = `ex3`;
+  } else if (arraySeries.includes('ex2')) {
+    oldestSeriesCode = `ex2`;
   } else if (arraySeries.includes('ex6')) {
     oldestSeriesCode = `ex6`;
   } else if (arraySeries.includes('pop3')) {
@@ -175,7 +219,7 @@ searchButton.addEventListener(`click`, async () => {
   const characterName = capitalizeEachWord(document.querySelector(`#my-input`).value);
   const characterNameFormatted = characterName.split(` `).join(`+`);
 
-  const response = await axios.get(`${apiCall}?name=${characterNameFormatted}`);
+  const response = await axios.get(`${apiCallForCards}?name=${characterNameFormatted}`);
   const cardArray = response.data.cards;
   console.log(cardArray);
 
@@ -206,6 +250,8 @@ searchButton.addEventListener(`click`, async () => {
 
     mainCardDiv.innerHTML = `<img id="main-card-img" src="${image}">`;
     mainCardDiv.style.display = `block`;
+    evolutionCardBanner.style.display = `none`;
+    evolutionCardDiv.style.display = `none`;
 
 
     //update right card in evolution section.
@@ -220,7 +266,7 @@ searchButton.addEventListener(`click`, async () => {
       //get basic card
       const basicCharacterName = capitalizeEachWord(element.evolvesFrom).split(` `).join(`+`);
 
-      const response = await axios.get(`${apiCall}?name=${basicCharacterName}`);
+      const response = await axios.get(`${apiCallForCards}?name=${basicCharacterName}`);
       const cardArray = response.data.cards;
       const basicElement = getOldestCard(cardArray);
       basicElement.imageUrlHiRes;
@@ -258,7 +304,7 @@ searchButton.addEventListener(`click`, async () => {
       //get stage1 card
       const basicCharacterName = capitalizeEachWord(element.evolvesFrom).split(` `).join(`+`);
 
-      const response = await axios.get(`${apiCall}?name=${basicCharacterName}`);
+      const response = await axios.get(`${apiCallForCards}?name=${basicCharacterName}`);
       const cardArray = response.data.cards;
       const stage1Element = getOldestCard(cardArray);
       stage1Element.imageUrlHiRes;
@@ -271,7 +317,7 @@ searchButton.addEventListener(`click`, async () => {
       //get basic card
       const basicCardName = capitalizeEachWord(stage1Element.evolvesFrom).split(` `).join(`+`);
 
-      const response2 = await axios.get(`${apiCall}?name=${basicCardName}`);
+      const response2 = await axios.get(`${apiCallForCards}?name=${basicCardName}`);
       const cardArray2 = response2.data.cards;
       const basicElement = getOldestCard(cardArray2);
       basicElement.imageUrlHiRes;
