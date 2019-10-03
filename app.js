@@ -30,13 +30,17 @@ const buildListOfCommonNames = () => {
       `Machoke`, `Chansey`, `Furret`, `Sentret`, `JigglyPuff`, `Snorlax`, `Persian`, `Swirlix`, `Eevee`,
       `Drowzee`, `Floatzel`, `Zorua`, `Inkay`, `Mightyena`, `Psyduck`, `Poochyena`, `Xerneas`, `Luxray`,
       `Deoxys`, `Turtwig`, `Slowbro`, `Slowpoke`, `Slowking`, `Misdreavus`, `Vulpix`, `Ivysaur`, `Barboach`,
-      `Umbreon`];
+      `Umbreon`, `Bidoof`, `Flareon`, `Talonflame`, `Fletchinder`, `Fletchling`, `Jynx`, `Jolteon`, `Joltik`,
+      `Jumpluff`, `Skiploom`, `Hoppip`, `Nidoqueen`, `Nidorina`, `Nidoran`, `Quagsire`, `Quilladin`,
+      `Cyndaquil`, `Qwilfish`];
   return array.sort();
 }
 function printName(e) {
   console.log(`printName: ${e}`);
   document.querySelector(`#my-input`).value = e;
   filterFunction();
+  searchButton.click();
+
 }
 function filterFunction() {
   //show/hide "dropdown" list
@@ -212,6 +216,15 @@ const getOldestCard = (cardArray = []) => {
   return myElement;
 }
 
+searchInput.addEventListener("keyup", function (event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    searchButton.click();
+  }
+});
 searchButton.addEventListener(`click`, async () => {
 
   dropDownListItems.style.display = `none`;
@@ -246,7 +259,7 @@ searchButton.addEventListener(`click`, async () => {
     mainCardId = element.id;
     let image = element.imageUrlHiRes;
 
-    mainCardBanner.innerHTML = `<h1 id="main-card-banner-title">${characterName}</h1>`;
+    mainCardBanner.innerHTML = `<h1 id="main-card-banner-title">${element.name}</h1>`;
 
     mainCardDiv.innerHTML = `<img id="main-card-img" src="${image}">`;
     mainCardDiv.style.display = `block`;
@@ -342,14 +355,14 @@ searchButton.addEventListener(`click`, async () => {
     cardArray.forEach(element => {
 
       if (mainCardId !== element.id) {
-        altCardBanner.innerHTML = `<h1 id="alt-card-banner-title">Alternate Cards for ${characterName}</h1>`;
+        altCardBanner.innerHTML = `<h1 id="alt-card-banner-title">Alternate Cards for ${element.name}</h1>`;
         altCardDiv.innerHTML += `<img id="alt-card-img" src="${element.imageUrlHiRes}">`;
         altCardDiv.style.display = `block`;
 
       }
 
       evolutionCardBanner.innerHTML = `
-    <h1 id="evolution-card-banner-title">Evolution Chart for ${characterName}</h1>`;
+    <h1 id="evolution-card-banner-title">Evolution Chart for ${element.name}</h1>`;
 
     });
 
