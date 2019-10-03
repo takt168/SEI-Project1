@@ -2,7 +2,9 @@
   margin: 0 auto;
   font-family: 'Lato', sans-serif;
 }
-
+body, html {
+  height: 100%;
+}
 a {
   text-decoration: none;
   color: #FECB03;
@@ -45,7 +47,6 @@ body {
 
 main {
   margin-top: 60px;
-  min-height: 900px;
   height: 100%;
   background-image: url("Pokemon_Trading_Card_Game_cardback.jpg");
   background-color: gray;
