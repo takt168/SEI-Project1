@@ -2,9 +2,10 @@
   margin: 0 auto;
   font-family: 'Lato', sans-serif;
 }
-html,  {
+html {
   height: 100%;
 }
+
 a {
   text-decoration: none;
   color: #FECB03;
@@ -42,7 +43,7 @@ header #app-name {
           transform: rotate(360deg);
 }
 body {
-  min-width: 800px;
+  min-width: 660px;
   background-image: url("Pokemon_Trading_Card_Game_cardback.jpg");
 }
 
@@ -235,6 +236,14 @@ main {
   }
   #evolution-card {
     padding: 0;
+  }
+
+  .evolution-card-header-wrapper {
+    margin: 10px 10px 0 10px;
+  }
+  
+  .evolution-cards {
+    margin: 10px;
   }
 }
 
