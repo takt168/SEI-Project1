@@ -1,10 +1,13 @@
-# Pokémon TCG Lookup
+# Pokémon Card Finder
+
+[Link to Pokémon Card Finder](http://pokemon-card-finder.surge.sh)
 
 ## Project Purpose:
-Pokémon TCG Lookup was inpsired by my 8 year old son, who just started to play Pokémon The Card Game (TCG).  He is always asking me about a specific card or character and asking aboug them.  He wants to know who they evolve into, what other versions of the card exist, what resources do they use.  Pokémon TCG Lookup is build to answer his question, so I don't have too.  It will be built on HTML, CSS and JavaScript.  The user will enter a character name and will get back all the information that they could want about that character.
+Pokémon Card Finder was inpsired by my 8 year old son Alex, who just started to play Pokémon The Card Game (TCG).  He is always asking me about a specific card or character and asking aboug them.  He wants to know who they evolve into, what other versions of the card exist, what resources do they use.  Pokémon TCG Lookup is build to answer his question, so I don't have too.  It will be built on HTML, CSS and JavaScript.  The user will enter a character name and will get back all the information that they could want about that character.
 
-## API to be used
+## API to be used:
 [Pokémon TCG API] (https://pokemontcg.io/)
+
 
 ## Features for MVP:
 
@@ -22,13 +25,14 @@ Pokémon cards come in different levels: basic, level 1 and level 2.  If a user 
 
 
 ## Stretch Goals:
-provide autocomplete functionality on the search bar.
+* provide autocomplete functionality on the search bar.
+* zoom modal when a user clicks on a card.
 
-zoom modal when a user clicks on a card.
-
+##Problem-solving approach
+##Struggles you encountered and how you solved them
+##Problems you weren’t able to solve
+##Code that you are proud of
 
 ## Wireframes:
-wireframe
-
-![wireframe](wireframe.jpg)
+![wireframe](wireframe1.jpg)
 
