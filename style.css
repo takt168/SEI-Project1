@@ -74,6 +74,7 @@ main {
   vertical-align: top;
   margin-top: 10px;
   height: 46px;
+  background-color: white;
 }
 
 #search-button:hover {
